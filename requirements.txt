@@ -11,6 +11,8 @@ wikipedia
 langchain-text-splitters
 langchain-openai
 chromadb
+langchain_chroma
+faiss-cpu
 sentence_transformers
 langchain_huggingface
 # pip install -r requirements.txt
