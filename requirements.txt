@@ -1,20 +1,19 @@
-langchain
-ipykernel
-python-dotenv
-langchain-community
-pypdf
-bs4
-arxiv
-fitz
-pymupdf
-wikipedia
-langchain-text-splitters
+langchain==0.2.17
+langchain-community==0.2.19
+langchain-core==0.2.43
+langchain-text-splitters==0.2.4
+langchain-google-genai
 langchain-openai
-chromadb
-langchain_chroma
 faiss-cpu
-sentence_transformers
-langchain_huggingface
+chromadb
+sentence-transformers
+python-dotenv
+beautifulsoup4
+pypdf
+wikipedia
+arxiv
+pymupdf
+ipykernel
 # pip install -r requirements.txt
 #  & "C:\Users\DELL\anaconda3\shell\condabin\conda-hook.ps1"
 # conda activate .\venv
