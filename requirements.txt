@@ -2,17 +2,21 @@ langchain==0.2.17
 langchain-community==0.2.19
 langchain-core==0.2.43
 langchain-text-splitters==0.2.4
-langchain-google-genai
-langchain-openai
+
+langchain-google-genai==1.0.10
+langchain-openai==0.1.25
+
 faiss-cpu
 chromadb
 sentence-transformers
+
 python-dotenv
 beautifulsoup4
 pypdf
 wikipedia
 arxiv
 pymupdf
+
 ipykernel
 # pip install -r requirements.txt
 #  & "C:\Users\DELL\anaconda3\shell\condabin\conda-hook.ps1"
