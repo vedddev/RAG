@@ -61,7 +61,16 @@ st.write("Go ahead and ask any question")
 user_input=st.text_input("You:")
 
 if user_input:
-    response=generate_response(user_input,google_api_key,model,temperature,max_tokens)
-    st.write(response)
+    if not google_api_key:
+        st.error("Please enter a Gemini API Key")
+    else:
+        response = generate_response(
+            user_input,
+            google_api_key,
+            model,
+            temperature,
+            max_tokens
+        )
+        st.write(response)
 else:
     st.write("Please Provide the query.")
