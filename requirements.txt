@@ -20,8 +20,8 @@ python-dotenv
 beautifulsoup4
 pypdf
 pymupdf
-wikipedia
-arxiv
+wikipedia==1.4.0
+arxiv==2.1.3
 
 fastapi
 uvicorn
@@ -30,6 +30,10 @@ sse-starlette
 
 ipykernel
 pydantic>=2.9.0
+
+
+duckdb==0.10.3
+duckduckgo-search==6.3.0
 # pip install -r requirements.txt
 #  & "C:\Users\DELL\anaconda3\shell\condabin\conda-hook.ps1"
 #conda activate .\venv
