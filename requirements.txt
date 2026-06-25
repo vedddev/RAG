@@ -15,6 +15,7 @@ pandas==2.2.3
 faiss-cpu
 chromadb
 sentence-transformers
+streamlit
 
 python-dotenv
 beautifulsoup4
