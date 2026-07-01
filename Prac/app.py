@@ -1,13 +1,10 @@
 import streamlit as st
 import tempfile
 import os
-
 from dotenv import load_dotenv
-
 from langchain_groq import ChatGroq
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_community.chat_message_histories import ChatMessageHistory
 
@@ -31,6 +28,7 @@ from langchain.chains.combine_documents import (
 from langchain_text_splitters import (
     RecursiveCharacterTextSplitter,
 )
+
 
 
 load_dotenv()
