@@ -35,6 +35,10 @@ pydantic>=2.9.0
 
 duckdb==0.10.3
 duckduckgo-search==6.3.0
+validators==0.28.1
+youtube_transcript_api
+unstructured
+pytube
 # pip install -r requirements.txt
 #  & "C:\Users\DELL\anaconda3\shell\condabin\conda-hook.ps1"
 #conda activate .\venv
