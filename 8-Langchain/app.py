@@ -10,7 +10,7 @@ from langchain.callbacks import StreamlitCallbackHandler
 
 ## Set up the Streamlit app
 st.set_page_config(page_title="Math Solver",page_icon="🧮")
-st.title("Text to math Problem Solver using Google gemma 2")
+st.title("Text to math Problem Solver using Groq model")
 
 groq_api_key=st.sidebar.text_input(label="Groq_API_Key",type="password")
 
@@ -26,7 +26,7 @@ Wikipedia_Wrapper=WikipediaAPIWrapper()
 wikipedia_tool=Tool(
     name="Wikipedia",
     func=Wikipedia_Wrapper.run,
-    description="A tool for searching the internet to find the vatious information on the topics mentioned"
+    description="Useful for answering factual questions using Wikipedia."
 )
 
 ## initializeing the math tools
@@ -50,11 +50,14 @@ prompt_template=PromptTemplate(
 )
 
 ## Combine all the tools into chain
-LLMChain(llm=llm,prompt=prompt_template)
+reasoning_chain = LLMChain(
+    llm=llm,
+    prompt=prompt_template
+)
 
 reasoning_tool=Tool(
     name="Reasoning",
-    func=math_chain.run,
+    func=reasoning_chain.run,
     description="A tool for answering logic-based and reasoning questions."
 )
 
@@ -64,7 +67,7 @@ assistant_agent=initialize_agent(
     tools=[wikipedia_tool,calculator,reasoning_tool],
     llm=llm,
     agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
-    Verbose=False,
+    verbose=False,
     handle_parsing_errors=True
 )
 
@@ -73,7 +76,7 @@ if "messages" not in st.session_state:
         {"role":"assistant","content":"Hi,I'm a math chatbot who cna answer all your maths questions."}
     ]
     
-for msg in st.session_state.message:
+for msg in st.session_state.messages:
     st.chat_message(msg["role"]).write(msg['content'])
     
     
@@ -87,14 +90,15 @@ question=st.text_area("Enter your question:","I have 5 bananas and 7 grapes.I ea
 
 if st.button("find my answer"):
     if question:
-        with st.spinner("Genrate response..."):
+        with st.spinner("Generating response..."):
             st.session_state.messages.append({"role":"user","content":question})
             st.chat_message("user").write(question)
             
             st_cb=StreamlitCallbackHandler(st.container(),expand_new_thoughts=False)
-            response=assistant_agent.run(st.session_state.messages,callbacks=[st_cb])
+            response = assistant_agent.invoke({"input": question},callbacks=[st_cb])
+            response = response["output"]
             st.session_state.messages.append({"role":'assistant',"content":response})
             st.success(response)
-            
+        
     else:
         st.warning("Please enter the question")
