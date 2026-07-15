@@ -1,46 +1,97 @@
-langchain==0.2.17
-langchain-community==0.2.19
-langchain-core==0.2.43
-langchain-text-splitters==0.2.4
-langchain-chroma==0.1.4
+# =========================
+# LangChain
+# =========================
+langchain
+langchain-core
+langchain-community
+langchain-text-splitters
+langchain-chroma
+langchain-huggingface
 
-langchain-google-genai==1.0.10
-langchain-openai==0.1.25
-langchain-groq==0.1.10
-langserve==0.2.2
-langchain-huggingface==0.0.3
-google-genai>=1.20.0,<2.0.0
+# =========================
+# LLM Providers
+# =========================
+langchain-google-genai
+langchain-openai
+langchain-groq
+huggingface_hub
+google-genai
 
-pandas==2.2.3
+# =========================
+# Vector Stores
+# =========================
 faiss-cpu
 chromadb
+
+# =========================
+# Embedding Models
+# =========================
 sentence-transformers
-streamlit
+transformers
+accelerate
+torch
 
-python-dotenv
-beautifulsoup4
-pypdf
-pymupdf
-wikipedia==1.4.0
-arxiv==2.1.3
-
+# =========================
+# Web Framework
+# =========================
 fastapi
 uvicorn
 python-multipart
 sse-starlette
+langserve
 
-ipykernel
-pydantic>=2.9.0
+# =========================
+# Data Science
+# =========================
+numpy
+pandas
+scikit-learn
+matplotlib
+plotly
 
+# =========================
+# Streamlit
+# =========================
+streamlit
 
-duckdb==0.10.3
-duckduckgo-search==6.3.0
-validators==0.28.1
-youtube_transcript_api
+# =========================
+# Document Loaders
+# =========================
+pypdf
+pymupdf
 unstructured
+beautifulsoup4
+lxml
+
+# =========================
+# Utilities
+# =========================
+python-dotenv
+requests
+httpx
+validators
+duckduckgo-search
+youtube-transcript-api
 pytube
+wikipedia
+arxiv
 numexpr
-httpx==0.27.2
+
+# =========================
+# Database
+# =========================
+duckdb
+
+# =========================
+# Validation
+# =========================
+pydantic
+
+# =========================
+# Notebook
+# =========================
+ipykernel
+jupyter
 # pip install -r requirements.txt
 #  & "C:\Users\DELL\anaconda3\shell\condabin\conda-hook.ps1"
 #conda activate .\venv
