@@ -1,9 +1,7 @@
 import re
 import streamlit as st
 import validators
-
 from youtube_transcript_api import YouTubeTranscriptApi
-
 from langchain_core.documents import Document
 from langchain_core.prompts import PromptTemplate
 from langchain_huggingface import HuggingFaceEndpoint
