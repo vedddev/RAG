@@ -81,7 +81,7 @@ numexpr
 # Database
 # =========================
 duckdb
-
+cassio
 # =========================
 # Validation
 # =========================
@@ -92,6 +92,11 @@ pydantic
 # =========================
 ipykernel
 jupyter
+
+tiktoken
+datasets
+
+gradio
 # pip install -r requirements.txt
 #  & "C:\Users\DELL\anaconda3\shell\condabin\conda-hook.ps1"
 #conda activate .\venv
