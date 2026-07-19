@@ -1,50 +1,127 @@
 import streamlit as st
-from langchain_groq import ChatGroq
-from langchain_community.utilities import ArxivAPIWrapper,WikipediaAPIWrapper
-from langchain_community.tools import ArxivQueryRun,WikipediaQueryRun,DuckDuckGoSearchRun
-from langchain.agents import initialize_agent,AgentType
-from langchain.callbacks import StreamlitCallbackHandler
-import os
 from dotenv import load_dotenv
+from langsmith import Client
+from langchain.agents import create_agent
+from langchain_groq import ChatGroq
 
-arix_wrapper=ArxivAPIWrapper(top_k_results=1,doc_content_chars_max=200)
-arxiv=ArxivQueryRun(api_wrapper=arix_wrapper)
+from langchain_community.tools import (
+    DuckDuckGoSearchRun,
+    WikipediaQueryRun,
+    ArxivQueryRun,
+)
+from langchain_community.utilities import (
+    WikipediaAPIWrapper,
+    ArxivAPIWrapper,
+)
 
-api_wrapper=WikipediaAPIWrapper(top_k_results=1,doc_content_chars_max=200)
-wiki=WikipediaQueryRun(api_wrapper=api_wrapper)
+load_dotenv()
 
-search=DuckDuckGoSearchRun(name="Search")
-st.title("🔎 LangChain - Chat with search")
-"""
-In this example, we're using `StreamlitCallbackHandler` to display the thoughts and actions of an agent in an interactive Streamlit app.
-Try more LangChain 🤝 Streamlit Agent examples at [github.com/langchain-ai/streamlit-agent](https://github.com/langchain-ai/streamlit-agent).
-"""
-st.sidebar.title('Settings')
-api_key=st.sidebar.text_input("Enter your Groq API Key:",type="password")
+st.set_page_config(page_title="LangChain Search Agent")
+st.title("🔎 AI Search Agent")
+
+
+# Sidebar
+
+groq_api_key = st.sidebar.text_input(
+    "Enter Groq API Key",
+    type="password"
+)
+
+
+# Tools
+
+search = DuckDuckGoSearchRun(name='Search')
+
+wiki = WikipediaQueryRun(
+    api_wrapper=WikipediaAPIWrapper(
+        top_k_results=1,
+        doc_content_chars_max=300
+    )
+)
+
+arxiv = ArxivQueryRun(
+    api_wrapper=ArxivAPIWrapper(
+        top_k_results=1,
+        doc_content_chars_max=300
+    )
+)
+
+tools = [search, wiki, arxiv]
+
+
+# Chat History
 
 if "messages" not in st.session_state:
-    st.session_state["messages"] = [
+    st.session_state.messages = []
+
+for msg in st.session_state.messages:
+    st.chat_message(msg["role"]).write(msg["content"])
+
+
+# User Input
+
+prompt = st.chat_input("Ask me anything...")
+
+if prompt:
+
+    if not groq_api_key:
+        st.warning("Please enter your Groq API Key.")
+        st.stop()
+
+    st.session_state.messages.append(
         {
-            "role": "assistant",
-            "content": "Hi, I'm a chatbot who can search the web. How can I help you?"
+            "role": "user",
+            "content": prompt
         }
-    ]
-    
-for msg in st.session_state.message:
-    st.chat_message(msg['role']).write(msg['content'])
+    )
 
-
-if prompt:=st.chat_input(placeholder="What is machine learning?"):
-    st.session_state.messages.append({"role":"user","content":prompt})
     st.chat_message("user").write(prompt)
 
-    llm=ChatGroq(groq_api_key=api_key,model_name="llama-3.3-70b-versatile",streaming=True)
-    tools=[search,arxiv,wiki]
+    llm = ChatGroq(
+        groq_api_key=groq_api_key,
+        model_name="openai/gpt-oss-20b",
+        temperature=0
+    )
 
-    search_agent=initialize_agent(tools,llm,agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,handling_parsing_errors=True)
+    # Pull standard ReAct prompt
+    client=Client()
+    # react_prompt = client.("hwchase17/react")
 
-    with st.chat_message("assistant"):
-        st_cb=StreamlitCallbackHandler(st.container(),expand_new_thoughts=False)
-        response=search_agent.run(st.session_state.messages,callbacks=[st_cb])
-        st.session_state.messages.append({'role':'assistant',"content":response})
-        st.write(response)
+    # Create agent
+    agent = create_agent(
+    model=llm,
+    tools=tools,
+    # system_prompt="You are a helpful AI assistant that can use tools to answer user questions."
+)
+
+    # Agent Executor
+    # agent_executor = AgentExecutor(
+    #     agent=agent,
+    #     tools=tools,
+    #     verbose=True,
+    #     handle_parsing_errors=True
+    # )
+
+    with st.spinner("Thinking..."):
+
+        response = agent.invoke(
+            {
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ]
+            }
+        )
+
+        answer = response["messages"][-1].content
+
+        st.write(answer)
+
+        st.session_state.messages.append(
+            {
+                "role": "assistant",
+                "content": answer
+            }
+        )

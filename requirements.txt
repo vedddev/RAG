@@ -16,6 +16,7 @@ langchain-openai
 langchain-groq
 huggingface_hub
 google-genai
+langchainhub
 
 # =========================
 # Vector Stores
