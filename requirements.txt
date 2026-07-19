@@ -97,6 +97,8 @@ tiktoken
 datasets
 
 gradio
+
+langchain_nvidia_ai_endpoints
 # pip install -r requirements.txt
 #  & "C:\Users\DELL\anaconda3\shell\condabin\conda-hook.ps1"
-#conda activate .\venv
+#conda activate .\venpip show langchain_chains
