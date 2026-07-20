@@ -100,6 +100,8 @@ datasets
 gradio
 
 langchain_nvidia_ai_endpoints
+crewai
+crewai_tools
 # pip install -r requirements.txt
 #  & "C:\Users\DELL\anaconda3\shell\condabin\conda-hook.ps1"
 #conda activate .\venpip show langchain_chains

@@ -12,9 +12,9 @@ from langchain_core.prompts import ChatPromptTemplate
 from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_classic.chains import create_retrieval_chain
 
-# ===========================
+
 # Load API Key
-# ===========================
+
 load_dotenv()
 
 api_key = os.getenv("NVIDIA_API_KEY")
@@ -23,18 +23,18 @@ if not api_key:
     st.error("NVIDIA_API_KEY not found in .env")
     st.stop()
 
-# ===========================
+
 # Initialize LLM
-# ===========================
+
 llm = ChatNVIDIA(
     model="meta/llama-3.2-3b-instruct",
     api_key=api_key,
     max_completion_tokens=4096
 )
 
-# ===========================
+
 # Prompt
-# ===========================
+
 prompt = ChatPromptTemplate.from_template("""
 You are an expert document assistant.
 
@@ -52,9 +52,9 @@ Question:
 Answer:
 """)
 
-# ===========================
+
 # Create Vector Store
-# ===========================
+
 def vector_embedding():
     if "vectors" not in st.session_state:
 
@@ -83,25 +83,25 @@ def vector_embedding():
 
         st.success("Vector Database Created Successfully!")
 
-# ===========================
+
 # Streamlit UI
-# ===========================
-st.title("📄 NVIDIA RAG Chatbot")
+
+st.title("NVIDIA RAG Chatbot")
 
 if st.button("Create Vector Database"):
     vector_embedding()
 
-# ===========================
+
 # Test LLM
-# ===========================
+
 if st.button("Test LLM"):
     with st.spinner("Testing LLM..."):
         response = llm.invoke("Say Hello")
         st.write(response.content)
 
-# ===========================
+
 # User Question
-# ===========================
+
 question = st.text_input("Ask a question about your documents")
 
 if question:
