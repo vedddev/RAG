@@ -22,7 +22,7 @@ langchainhub
 # Vector Stores
 # =========================
 faiss-cpu
-chromadb
+chromadb==0.5.23
 
 # =========================
 # Embedding Models

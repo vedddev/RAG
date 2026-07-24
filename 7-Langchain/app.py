@@ -9,8 +9,8 @@ from urllib.parse import urlparse, parse_qs
 from youtube_transcript_api import YouTubeTranscriptApi
 
 from langchain_core.documents import Document
-from langchain.prompts import PromptTemplate
-from langchain.chains.summarize import load_summarize_chain
+from langchain_core.prompts import PromptTemplate
+from langchain_classic.chains.summarize import load_summarize_chain
 from langchain_groq import ChatGroq
 
 # ---------------- Streamlit ---------------- #
@@ -54,11 +54,11 @@ def get_video_id(link):
 
 def load_youtube(url):
     video_id = get_video_id(url)
-
-    transcript = YouTubeTranscriptApi.get_transcript(
+    api=YouTubeTranscriptApi()
+    transcript = api.fetch(
         video_id,
         languages=["hi", "en"]
-    )
+    ).to_raw_data()
 
     text = " ".join(item["text"] for item in transcript)
 
