@@ -1,10 +1,10 @@
 import traceback
 import validators
-import requests
 import streamlit as st
+import requests
 
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse,parse_qs
 
 from youtube_transcript_api import YouTubeTranscriptApi
 
@@ -13,100 +13,90 @@ from langchain_core.prompts import PromptTemplate
 from langchain_classic.chains.summarize import load_summarize_chain
 from langchain_groq import ChatGroq
 
-# ---------------- Streamlit ---------------- #
 
+
+# Streamlit
 st.set_page_config(
-    page_title="YouTube & Website Summarizer",
-    page_icon="🦜"
+    page_title='Summarizer'
 )
 
-st.title("🦜 AI YouTube & Website Summarizer")
+st.title('Context creator')
 
-with st.sidebar:
-    groq_api_key = st.text_input(
-        "Groq API Key",
-        type="password"
-    )
 
-url = st.text_input(
-    "Enter YouTube or Website URL"
+groq_api_key=st.sidebar.text_input(
+    'Enter the groq key',
+    type='password'
 )
 
-# ---------------- LLM ---------------- #
+url=st.text_input(
+    'Enter the url'
+)
 
-prompt = PromptTemplate(
-    input_variables=["text"],
+
+#LLM
+
+prompt=PromptTemplate(
+    input_variables=['text'],
     template="""
-    Summarize the following content in about 300 words in English.
-
-{text}
-"""
+    Summarize the following content like a professional summarizer.
+    
+    {text}
+    """
+    
 )
 
-# ---------------- Functions ---------------- #
+# Functions
 
 def get_video_id(link):
-    if "youtu.be" in link:
-        return link.split("/")[-1].split("?")[0]
-
-    return parse_qs(urlparse(link).query)["v"][0]
-
+    if 'youtu.be' in link:
+        return link.split('/')[-1].split('?')[0]
+    return parse_qs(urlparse(link).query)['v'][0]
 
 def load_youtube(url):
-    video_id = get_video_id(url)
+    video_id=get_video_id(url)
     api=YouTubeTranscriptApi()
-    transcript = api.fetch(
+    transcript=api.fetch(
         video_id,
-        languages=["hi", "en"]
+        languages=['hi','en']
+        
     ).to_raw_data()
-
-    text = " ".join(item["text"] for item in transcript)
-
+    
+    text=" ".join(item['text'] for item in transcript)
     return [Document(page_content=text)]
 
-
 def load_website(url):
-
-    headers = {
-        "User-Agent":
-        "Mozilla/5.0"
+    headers={
+        "User-Agent":"Mozilla/5.0"
     }
-
-    response = requests.get(
+    response=requests.get(
         url,
         headers=headers,
         timeout=20
     )
-
-    soup = BeautifulSoup(response.text, "html.parser")
-
-    for tag in soup(["script", "style"]):
+    
+    soup=BeautifulSoup(response.text,'html.parser')
+    
+    for tag in soup(['script','style']):
         tag.decompose()
-
-    text = soup.get_text(separator=" ")
-
-    return [Document(page_content=text)]
-
-
-# ---------------- Button ---------------- #
-
-if st.button("Summarize"):
-
+    text=soup.get_text(separator='')
+    
+    return [Document(page_content=text)
+]
+#button.
+if st.button('Click me'):
     if not groq_api_key:
-
         st.error("Please enter Groq API Key.")
         st.stop()
-
+        
     if not validators.url(url):
-
-        st.error("Please enter a valid URL.")
+        st.error('Please enter the Url')
         st.stop()
-
+        
     try:
 
         llm = ChatGroq(
             api_key=groq_api_key,
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-20b",
             temperature=0
         )
 
