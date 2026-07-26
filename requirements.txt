@@ -102,6 +102,10 @@ gradio
 langchain_nvidia_ai_endpoints
 crewai
 crewai_tools
+
+pinecone=6.0.2
+pinecone-text
+pinecone-notebooks
 # pip install -r requirements.txt
 #  & "C:\Users\DELL\anaconda3\shell\condabin\conda-hook.ps1"
 #conda activate .\venpip show langchain_chains
